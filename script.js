@@ -87,31 +87,48 @@ if (terminalText) {
   terminalObserver.observe(terminalText);
 }
 
-// ===== Form handling =====
+// ===== Form handling (FormSubmit) =====
 const contactForm = document.getElementById('contact-form');
 const formMessage = document.getElementById('form-message');
 
-contactForm.addEventListener('submit', (e) => {
+contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const submitBtn = contactForm.querySelector('button[type="submit"]');
   const originalText = submitBtn.textContent;
   submitBtn.textContent = 'Enviando...';
   submitBtn.disabled = true;
+  formMessage.classList.add('hidden');
 
-  // Simulate form submission (replace with actual Formspree or similar)
-  setTimeout(() => {
-    formMessage.textContent = '¡Mensaje enviado! Te responderé pronto.';
-    formMessage.className = 'text-center text-sm font-mono mt-2 text-accent';
+  const formData = new FormData(contactForm);
+
+  try {
+    const response = await fetch('https://formsubmit.co/ajax/fmolina.inf@gmail.com', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: formData
+    });
+
+    if (response.ok) {
+      formMessage.textContent = '¡Mensaje enviado! Te responderé pronto.';
+      formMessage.className = 'text-center text-sm font-mono mt-2 text-accent';
+      formMessage.classList.remove('hidden');
+      contactForm.reset();
+    } else {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.message || 'Error en el envío');
+    }
+  } catch (error) {
+    formMessage.textContent = 'Hubo un error al enviar. Intenta de nuevo o escríbeme a fmolina.inf@gmail.com';
+    formMessage.className = 'text-center text-sm font-mono mt-2 text-red-400';
     formMessage.classList.remove('hidden');
+  } finally {
     submitBtn.textContent = originalText;
     submitBtn.disabled = false;
-    contactForm.reset();
-
     setTimeout(() => {
       formMessage.classList.add('hidden');
     }, 5000);
-  }, 1500);
+  }
 });
 
 // ===== Current year in footer =====
