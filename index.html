@@ -554,10 +554,11 @@
 
           <!-- Contact Form -->
           <div class="bg-bg-secondary/60 border border-border-color rounded-xl p-6 md:p-8">
-            <form id="contact-form" class="space-y-5" novalidate>
+            <form id="contact-form" class="space-y-5" action="https://formsubmit.co/fmolina.inf@gmail.com" method="POST" novalidate>
               <input type="hidden" name="_captcha" value="false" />
               <input type="hidden" name="_template" value="table" />
               <input type="hidden" name="_subject" value="Nuevo mensaje desde tu portfolio" />
+              <input type="hidden" name="_autoresponse" value="¡Gracias por contactarme! Recibí tu mensaje y te responderé pronto. - Francisco" />
               <div>
                 <label for="nombre" class="block text-text-secondary text-sm font-mono mb-2">Nombre</label>
                 <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" autocomplete="name" class="form-input w-full" required />
